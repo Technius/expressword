@@ -8,9 +8,13 @@ import akka.http.scaladsl.server.Directives._
 class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer) {
   val default =
     get {
-      complete {
-        "test"
+      pathSingleSlash {
+        encodeResponse {
+          getFromResource("static/index.html")
+        }
+      } ~
+      encodeResponse {
+        getFromResourceDirectory("static")
       }
-      // todo
     }
 }
