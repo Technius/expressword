@@ -5,8 +5,11 @@ import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl._
 import akka.http.scaladsl.server.Directives._
 
-class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer) {
+class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer)
+    extends util.Json4sMarshalling {
+
   val default =
+    path("api" / "words")(wordsApi) ~
     get {
       pathSingleSlash {
         encodeResponse {
@@ -15,6 +18,13 @@ class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer) {
       } ~
       encodeResponse {
         getFromResourceDirectory("static")
+      }
+    }
+
+  val wordsApi =
+    get {
+      complete {
+        Vocabulary("test", Seq(Definition(Noun, "test")), Seq(), Seq())
       }
     }
 }
