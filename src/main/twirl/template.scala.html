@@ -1,0 +1,31 @@
+@(title: String)(body: Html)
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>@title</title>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+</head>
+
+<body>
+<div class="page-header">
+  <h1>Vocab Star</h1>
+</div>
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href="#">About Us</a></li>
+  <li role="presentation"><a href="#">Vocabulary</a></li>
+  <li role="presentation"><a href="#">Tips</a></li>
+  <li role="presentation"><a href="#">Contact Us</a></li>
+</ul>
+
+<div class="container">
+  @body
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+
+</html>

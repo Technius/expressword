@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl._
 import akka.http.scaladsl.server.Directives._
+import play.twirl.api.Html
 
 class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer)
     extends util.Json4sMarshalling {
@@ -11,15 +12,17 @@ class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer)
   val default =
     path("api" / "words")(wordsApi) ~
     get {
-      pathSingleSlash {
-        encodeResponse {
-          getFromResource("static/index.html")
-        }
-      } ~
+      // TODO: pathSingleSlash(displayPage(html.home())) ~
       encodeResponse {
         getFromResourceDirectory("static")
       }
     }
+
+  def displayPage(page: Html) = encodeResponse { 
+    complete {
+      page.body
+    }
+  }
 
   val wordsApi =
     get {
