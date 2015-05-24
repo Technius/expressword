@@ -10,6 +10,7 @@ lazy val root = (project in file(".")).enablePlugins(SbtTwirl)
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-experimental" % "1.0-RC3",
   "org.json4s" %% "json4s-jackson" % "3.2.11",
+  "org.json4s" %% "json4s-ext" % "3.2.11",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 

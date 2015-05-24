@@ -2,15 +2,13 @@ package org.vocabstar
 
 import java.net.URL
 
-sealed trait WordCategory
-case object Noun        extends WordCategory
-case object Pronoun     extends WordCategory
-case object Verb        extends WordCategory
-case object Adjective   extends WordCategory
-case object Adverb      extends WordCategory
-case object Participle  extends WordCategory
-case object Article     extends WordCategory
-case object Preposition extends WordCategory
+object WordCategory extends Enumeration {
+  type WordCategory = Value
+  val Noun, Pronoun, Verb, Adjective, Adverb, Participle, Article, Preposition =
+    Value
+}
+
+import WordCategory._
 
 case class Definition(category: WordCategory, text: String)
 

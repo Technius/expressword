@@ -8,6 +8,8 @@ import akka.http.scaladsl.model.{ HttpEntity, MediaTypes, ResponseEntity }
 import akka.http.scaladsl.server.Directives._
 import play.twirl.api.Html
 
+import WordCategory._
+
 class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer)
     extends util.Json4sMarshalling {
 
