@@ -5,8 +5,7 @@
       $routeProvider
         .when('/', {
           title: 'ExpressWord',
-          templateUrl: '/assets/templates/index.html',
-          controller: 'SearchController'
+          templateUrl: '/assets/templates/index.html'
         })
         .when('/about', {
           title: 'ExpressWord - About',
@@ -37,9 +36,18 @@
         });
     })
     .controller('WordController', ['$scope', 'vocab', function($scope, vocab) {
+      if (vocab === undefined) return;
       document.title = 'ExpressWord - ' + vocab.word;
       $scope.vocab = vocab;
     }])
+    .directive('searchBox', function() {
+      return {
+        scope: {},
+        restrict: 'E',
+        controller: 'SearchController',
+        templateUrl: '/assets/templates/searchBox.html'
+      }
+    })
     .controller('SearchController', ['$scope', '$location',
         function($scope, $location) {
       $scope.search = function() {
