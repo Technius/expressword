@@ -1,0 +1,9 @@
+<div class="page-header">
+  <h1>Results for {{query}}</h1>
+</div>
+
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="vocab in results">
+    <a href="/word/{{::vocab.word}}">{{::vocab.word}} </a>
+  </li>
+</ul>

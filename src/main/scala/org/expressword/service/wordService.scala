@@ -25,7 +25,7 @@ class InMemoryWordService extends WordService {
 
   import WordService._
 
-  def receive = havingWords(Seq())
+  def receive = havingWords(Seq(Vocabulary("test", Seq(), Seq(), Seq())))
 
   def havingWords(words: Seq[Vocabulary]): Receive = {
     case UpdateWord(vocab) =>
@@ -38,5 +38,7 @@ class InMemoryWordService extends WordService {
       context.become(havingWords(split._2))
     case FindWordExact(word) =>
       sender() ! words.find(_.word == word)
+    case SearchWord(word) =>
+      sender() ! words.filter(_.word contains word)
   }
 }

@@ -31,6 +31,10 @@
             }]
           }
         })
+        .when('/search', {
+          templateUrl: '/assets/templates/search.html',
+          controller: 'SearchResultsController',
+        })
         .otherwise({
           redirectTo: '/'
         });
@@ -50,8 +54,14 @@
     })
     .controller('SearchController', ['$scope', '$location',
         function($scope, $location) {
+      var exactMatchRegex = /^"(.*)"$/
       $scope.search = function() {
-        $location.path('/word/' + $scope.query);
+        if (exactMatchRegex.test($scope.query)) {
+          $location.path('/word/' +
+            $scope.query.replace(exactMatchRegex, '$1'));
+        } else {
+          $location.path('/search').search('query', $scope.query);
+        }
       };
     }])
     .directive('wordUpdatePanel', function() {
@@ -64,9 +74,9 @@
     })
     .controller('WordUpdateCtrl', ['$scope', '$http', function($scope, $http) {
       var defaultEntry = {
-        word: "",
-        definitions: [{ text: "", category: "Part of Speech" }],
-        sentences: [""]
+        word: '',
+        definitions: [{ text: '', category: 'Part of Speech' }],
+        sentences: ['']
       };
       $scope.entry = angular.copy(defaultEntry);
       $scope.partsOfSpeech = ['Noun', 'Pronoun', 'Verb', 'Adjective',
@@ -75,7 +85,7 @@
         $scope.entry.definitions[0].category = p;
       };
       $scope.validateInput = function() {
-        var valid = $scope.entry.definitions[0].category !== "Part of Speech" &&
+        var valid = $scope.entry.definitions[0].category !== 'Part of Speech' &&
           $scope.entry.definitions[0].text.trim()  &&
           $scope.entry.word.trim() && $scope.entry.sentences[0].trim();
         return valid;
@@ -89,6 +99,13 @@
           });
         }
       };
+    }])
+    .controller('SearchResultsController', ['$scope', '$routeParams', '$http',
+        function($scope, $routeParams, $http) {
+      $scope.query = $routeParams.query ? $routeParams.query : '';
+      document.title = 'ExpressWord - Search: ' + $scope.query;
+      $http.get('/api/words?search=' + $scope.query)
+        .success(function(response) { $scope.results = response.message; });
     }])
     .run(['$rootScope', '$route', function($rootScope, $route) {
       $rootScope.$on('$routeChangeSuccess', function() {

@@ -25,6 +25,14 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
   val default =
     encodeResponse {
       path("api" / "words") {
+        (get & parameter("search")) { query =>
+          complete {
+            (WordService ? SearchWord(query)).mapTo[Seq[Vocabulary]].map {
+              case Seq() => ApiResponse.failure("No results found.")
+              case r => ApiResponse.success(r)
+            }
+          }
+        } ~
         (post & entity(as[Vocabulary])) { vocab =>
           complete {
             (WordService ? UpdateWord(vocab)).mapTo[Option[Vocabulary]] map {
