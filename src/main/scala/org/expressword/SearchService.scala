@@ -22,17 +22,21 @@ class SearchService(googleApiKey: String, cseId: String)
 
   val searchUrl =
     "https://www.googleapis.com/customsearch/v1?num=5&fields=" +
-    URLEncoder.encode("items(link,snippet,title)", "UTF-8") + "&key=" +
+    URLEncoder.encode("items(link,snippet,title,pagemap)", "UTF-8") + "&key=" +
     URLEncoder.encode(googleApiKey, "UTF-8") + "&cx=" + URLEncoder.encode(
-    cseId, "UTF-8")
+    cseId, "UTF-8") + "&excludeTerms=dictionary"
+
   def scrapeData(vocab: Vocabulary): Future[Vocabulary] = {
     val searchTerm = URLEncoder.encode(vocab.word, "UTF-8")
     val request = HttpRequest(uri =
       searchUrl + s"&q=$searchTerm&exactTerm=$searchTerm")
     Http().singleRequest(request) flatMap { response =>
       Unmarshal(response).to[SearchResult] map { results =>
-        vocab.copy(aggregate = results.items.map(
-          item => WebpageItem(item.link)))
+        val items = results.items.map { item =>
+          val thumbnailOpt = item.pagemap.`cse_thumbnail`.headOption.map(_.src)
+          Item(item.link, item.title, item.snippet, thumbnailOpt)
+        }
+        vocab.copy(aggregate = items)
       }
     }
   }
@@ -40,5 +44,8 @@ class SearchService(googleApiKey: String, cseId: String)
 
 object SearchService {
   case class SearchResult(items: Seq[SearchItem])
-  case class SearchItem(title: String, link: String, snippet: String)
+  case class SearchItem(title: String, link: String, snippet: String,
+      pagemap: SearchPagemap)
+  case class SearchPagemap(`cse_thumbnail`: Seq[SearchThumbnail])
+  case class SearchThumbnail(src: String)
 }
