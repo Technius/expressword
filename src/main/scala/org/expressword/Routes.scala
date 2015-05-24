@@ -1,4 +1,4 @@
-package org.vocabstar
+package org.expressword
 
 import akka.actor.{ ActorRef, ActorSystem }
 import akka.pattern.ask

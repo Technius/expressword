@@ -1,4 +1,4 @@
-package org.vocabstar.service
+package org.expressword.service
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -8,8 +8,8 @@ import akka.stream.ActorFlowMaterializer
 import java.net.URLEncoder
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import org.vocabstar._
-import org.vocabstar.util.Json4sMarshalling
+import org.expressword._
+import org.expressword.util.Json4sMarshalling
 import scala.concurrent.Future
 
 import SearchService._

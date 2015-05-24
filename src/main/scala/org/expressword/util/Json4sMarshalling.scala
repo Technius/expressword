@@ -1,4 +1,4 @@
-package org.vocabstar.util
+package org.expressword.util
 
 import akka.http.scaladsl.marshalling.{ PredefinedToEntityMarshallers, ToEntityMarshaller }
 import akka.http.scaladsl.model.MediaTypes
@@ -9,7 +9,7 @@ import org.json4s.ext.EnumNameSerializer
 import org.json4s.jackson.JsonMethods._
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.write
-import org.vocabstar.WordCategory
+import org.expressword.WordCategory
 import scala.concurrent.ExecutionContext
 
 object Json4sMarshalling extends Json4sMarshalling

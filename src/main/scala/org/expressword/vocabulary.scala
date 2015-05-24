@@ -1,4 +1,4 @@
-package org.vocabstar
+package org.expressword
 
 object WordCategory extends Enumeration {
   type WordCategory = Value

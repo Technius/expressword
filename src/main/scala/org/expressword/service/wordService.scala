@@ -1,4 +1,4 @@
-package org.vocabstar.service
+package org.expressword.service
 
 import akka.actor._
 import akka.actor.ActorSystem
@@ -6,7 +6,7 @@ import akka.pattern.pipe
 import akka.http.scaladsl.Http
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
-import org.vocabstar._
+import org.expressword._
 import scala.concurrent.Future
 
 trait WordService extends Actor {

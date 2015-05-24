@@ -1,4 +1,4 @@
-name := """vocabstar"""
+name := """expressword"""
 
 version := "1.0"
 

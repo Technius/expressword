@@ -1,4 +1,4 @@
-package org.vocabstar
+package org.expressword
 
 import akka.actor.{ ActorSystem, Props }
 import akka.stream.ActorFlowMaterializer
@@ -7,7 +7,7 @@ import com.typesafe.config.ConfigFactory
 
 object Boot extends App {
 
-  implicit val system = ActorSystem("vocabstar")
+  implicit val system = ActorSystem("expressword")
   implicit val materializer = ActorFlowMaterializer()
 
   val config = ConfigFactory.load()

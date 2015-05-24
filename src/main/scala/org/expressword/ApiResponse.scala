@@ -1,4 +1,4 @@
-package org.vocabstar
+package org.expressword
 
 case class ApiResponse[A <: AnyRef](status: String, message: A)
 
