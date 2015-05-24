@@ -21,7 +21,11 @@ class Routes(implicit system: ActorSystem, mat: ActorFlowMaterializer)
   val default =
     path("api" / "words")(wordsApi) ~
     get {
-      // TODO: pathSingleSlash(displayPage(html.home())) ~
+      path("word" / Segment) { word =>
+        complete(s"wip $word")
+      } ~
+      path("about")(displayPage(html.about())) ~
+      pathSingleSlash(displayPage(html.home())) ~
       encodeResponse {
         getFromResourceDirectory("static")
       }
