@@ -2,9 +2,9 @@
   <div class="panel-heading">Search</div>
   <div class="panel-body">
     <div class="col-lg-6">
-      <form>
+      <form ng-submit="search()">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Word">
+          <input type="text" ng-model="query" class="form-control" placeholder="Word"/>
         </div>
         <button type="submit" class="btn btn-warning">Discover a word</button>
       </form>
