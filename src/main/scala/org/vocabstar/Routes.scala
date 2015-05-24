@@ -30,46 +30,46 @@ class Routes(WordService: ActorRef)
       .compose(_.body)
 
   val default =
-    path("api" / "words") {
-      (post & entity(as[Vocabulary])) { vocab =>
-        complete {
-          WordService ? UpdateWord(vocab)
+    encodeResponse {
+      path("api" / "words") {
+        (post & entity(as[Vocabulary])) { vocab =>
+          complete {
+            WordService ? UpdateWord(vocab)
+          }
         }
-      }
-    } ~
-    path("api" / "words" / Segment) { word =>
+      } ~
+      path("api" / "words" / Segment) { word =>
+        get {
+          complete {
+            (WordService ? FindWordExact(word)).mapTo[Option[Vocabulary]] map {
+              case Some(vocab) => vocab
+              case _ => "not found"
+            }
+          }
+        } ~
+        delete {
+          complete {
+            (WordService ? RemoveWord(word)).mapTo[Option[Vocabulary]] map {
+              case Some(vocab) => vocab
+              case _ => "not found"
+            }
+          }
+        }
+      } ~
       get {
-        complete {
-          (WordService ? FindWordExact(word)).mapTo[Option[Vocabulary]] map {
-            case Some(vocab) => vocab
-            case _ => "not found"
-          }
+        path("word" / Segment) { word =>
+          complete(s"wip $word")
+        } ~
+        path("about")(displayPage(html.about())) ~
+        pathSingleSlash(displayPage(html.home())) ~
+        path("assets" / Segment) { segment =>
+          getFromResource(s"assets/$segment")
         }
-      } ~
-      delete {
-        complete {
-          (WordService ? RemoveWord(word)).mapTo[Option[Vocabulary]] map {
-            case Some(vocab) => vocab
-            case _ => "not found"
-          }
-        }
-      }
-    } ~
-    get {
-      path("word" / Segment) { word =>
-        complete(s"wip $word")
-      } ~
-      path("about")(displayPage(html.about())) ~
-      pathSingleSlash(displayPage(html.home())) ~
-      encodeResponse {
-        getFromResourceDirectory("static")
       }
     }
 
   def displayPage(page: Html) =
-    encodeResponse {
-      completeWith(htmlMarshaller) { callback =>
-        callback(page)
-      }
+    completeWith(htmlMarshaller) { callback =>
+      callback(page)
     }
 }
