@@ -1,21 +1,28 @@
-@()
+@() @template("Home") {
 
-@template("Home") {
-  <body>
-  <div>
-    Search
-    <div class="col-lg-6">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Search a term...">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
+<body>
+  <div class="panel panel-default">
+    <div class="panel-heading">Search</div>
+    <div class="panel-body">
+      <div class="col-lg-6">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Word">
+          </div>
+          <button type="submit" class="btn btn-warning">Search</button>
+        </form>
+      </div>
+      <!-- /.col-lg-6 -->
+    </div>
   </div>
 
-  <div>
-    <h>Featured</h>
+  <div class="panel panel-default">
+    <div class="panel-heading">Featured</div>
+    <div class="panel-body">
+      <div class="col-lg-6">
+        Featured
+      </div>
+    </div>
   </div>
 </body>
 }
