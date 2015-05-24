@@ -27,9 +27,9 @@ class InMemoryWordService extends WordService {
 
   def havingWords(words: Seq[Vocabulary]): Receive = {
     case UpdateWord(vocab) =>
-      val updated = words.view.filterNot(_.word != vocab.word) :+ vocab
-      sender() ! Unit
-      context.become(havingWords(updated.force))
+      val split = words.partition(_.word == vocab.word)
+      sender() ! split._1.headOption
+      context.become(havingWords(split._2 :+ vocab))
     case RemoveWord(word) =>
       val split = words.partition(_.word == word)
       sender() ! split._1.headOption

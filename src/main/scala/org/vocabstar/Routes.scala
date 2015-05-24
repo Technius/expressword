@@ -34,7 +34,10 @@ class Routes(WordService: ActorRef)
       path("api" / "words") {
         (post & entity(as[Vocabulary])) { vocab =>
           complete {
-            WordService ? UpdateWord(vocab)
+            (WordService ? UpdateWord(vocab)).mapTo[Option[Vocabulary]] map {
+              case Some(old) => ApiResponse.success(old)
+              case _ => ApiResponse.success("Word added")
+            }
           }
         }
       } ~
@@ -42,16 +45,14 @@ class Routes(WordService: ActorRef)
         get {
           complete {
             (WordService ? FindWordExact(word)).mapTo[Option[Vocabulary]] map {
-              case Some(vocab) => vocab
-              case _ => "not found"
+              ApiResponse.fromOpt(_, "Not found")
             }
           }
         } ~
         delete {
           complete {
             (WordService ? RemoveWord(word)).mapTo[Option[Vocabulary]] map {
-              case Some(vocab) => vocab
-              case _ => "not found"
+              ApiResponse.fromOpt(_, "Not found")
             }
           }
         }
