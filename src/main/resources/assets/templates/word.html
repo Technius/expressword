@@ -29,8 +29,14 @@
   <div class="panel-body">
     <ul class="media-list">
       <li class="media" ng-repeat="item in vocab.aggregate">
+      <div class="media-left">
+        <img ng-visible="item.thumbnail" class="media-object" src="{{item.thumbnail}}">
+      </div>
       <div class="media-body">
-        <h4 class="media-heading">{{item.url}}</h4>
+        <h4 class="media-heading">
+          <a href="{{item.url}}" target="_blank">{{item.title}}</a>
+        </h4>
+        {{item.snippet}}
       </div>
       </li>
     </ul>

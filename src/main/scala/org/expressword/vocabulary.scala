@@ -16,10 +16,5 @@ case class Vocabulary(
     sentences: Seq[String],
     aggregate: Seq[Item])
 
-sealed trait Item {
-  def url: String
-}
-
-case class WebpageItem(url: String) extends Item
-case class NewsItem(url: String, summary: String) extends Item
-case class VideoItem(url: String, description: String) extends Item
+case class Item(url: String, title: String, snippet: String,
+    thumbnail: Option[String] = None)

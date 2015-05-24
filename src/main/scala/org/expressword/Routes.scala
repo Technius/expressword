@@ -31,7 +31,7 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
               case Some(old) => ApiResponse.success(old)
               case _ =>
                 SearchService.scrapeData(vocab) onSuccess {
-                  case updated => //WordService ! UpdateWord(updated)
+                  case updated => WordService ! UpdateWord(updated)
                 }
                 ApiResponse.success("Word added")
             }
