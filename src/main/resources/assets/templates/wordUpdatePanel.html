@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Add Or Update An Entry!</div>
+  <div class="panel-body">
+    <h2>Word</h2>
+    <input type="text" class="form-control" placeholder="Word" aria-describedby="basic-addon2" ng-model="entry.word"/>
+    <h2>Definition</h2>
+    <div class="input-group">
+      <div class="input-group-btn" dropdown>
+        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle aria-expanded="false">{{entry.definitions[0].category}}<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="p in partsOfSpeech" ng-click="setPoS(p)">
+            <a>{{::p}}</a>
+          </li>
+        </ul>
+      </div>
+      <input type="text" class="form-control" placeholder="Definition" aria-describedby="basic-addon2" ng-model="entry.definitions[0].text"/>
+    </div>
+    <h2>Example sentence</h2>
+    <input type="text" class="form-control" placeholder="Example sentence" aria-describedby="basic-addon2" ng-model="entry.sentences[0]">
+
+    <button class="btn btn-primary" ng-disabled="!validateInput()" type="submit" ng-click="submitEntry()">Add Word!</span>
+
+  </div>
+</div>

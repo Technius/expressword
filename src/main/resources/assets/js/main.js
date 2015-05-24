@@ -54,6 +54,42 @@
         $location.path('/word/' + $scope.query);
       };
     }])
+    .directive('wordUpdatePanel', function() {
+      return {
+        scope: {},
+        restrict: 'E',
+        controller: 'WordUpdateCtrl',
+        templateUrl: '/assets/templates/wordUpdatePanel.html'
+      }
+    })
+    .controller('WordUpdateCtrl', ['$scope', '$http', function($scope, $http) {
+      var defaultEntry = {
+        word: "",
+        definitions: [{ text: "", category: "Part of Speech" }],
+        sentences: [""]
+      };
+      $scope.entry = angular.copy(defaultEntry);
+      $scope.partsOfSpeech = ['Noun', 'Pronoun', 'Verb', 'Adjective',
+        'Adverb', 'Participle', 'Article', 'Preposition'];
+      $scope.setPoS = function(p) {
+        $scope.entry.definitions[0].category = p;
+      };
+      $scope.validateInput = function() {
+        var valid = $scope.entry.definitions[0].category !== "Part of Speech" &&
+          $scope.entry.definitions[0].text.trim()  &&
+          $scope.entry.word.trim() && $scope.entry.sentences[0].trim();
+        return valid;
+      };
+      $scope.submitting = false;
+      $scope.submitEntry = function() {
+        if (!$scope.submitting && $scope.validateInput()) {
+          $scope.entry.aggregate = [];
+          $http.post('/api/words', $scope.entry).success(function() {
+            $scope.entry = angular.copy(defaultEntry);
+          });
+        }
+      };
+    }])
     .run(['$rootScope', '$route', function($rootScope, $route) {
       $rootScope.$on('$routeChangeSuccess', function() {
         document.title = $route.current.title;
