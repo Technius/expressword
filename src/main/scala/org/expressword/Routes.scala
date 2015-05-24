@@ -31,7 +31,7 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
               case Some(old) => ApiResponse.success(old)
               case _ =>
                 SearchService.scrapeData(vocab) onSuccess {
-                  case updated => WordService ! UpdateWord(updated)
+                  case updated => //WordService ! UpdateWord(updated)
                 }
                 ApiResponse.success("Word added")
             }
@@ -54,11 +54,9 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
           }
         }
       } ~
-      get {
-        pathSingleSlash(getFromResource("assets/template.html")) ~
-        path("assets" / Rest) { path =>
-          getFromResource(s"assets/$path")
-        }
-      }
+      path("assets" / Rest) { path =>
+        getFromResource(s"assets/$path")
+      } ~
+      getFromResource("assets/template.html")
     }
 }

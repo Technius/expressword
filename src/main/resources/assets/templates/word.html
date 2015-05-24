@@ -1,7 +1,38 @@
-<div>@vocab.word</div>
+<h1>{{vocab.word}}</h1>
 
-<div>Definition: </div>
+<hr/>
 
-<div>Example Sentence</div>
+<div class="panel panel-default">
+  <div class="panel-heading">Definitions</div>
+  <div class="panel-body">
+    <ol>
+      <li ng-repeat="meaning in vocab.definitions">
+      <i>{{meaning.category}}.</i> {{meaning.text}}
+      </li>
+    </ol>
+  </div>
+</div>
 
-<div>Interesting facts</div>
+<div class="panel panel-default">
+  <div class="panel-heading">Example Sentences</div>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="sentence in vocab.sentences">
+      {{sentence}}
+    </li>
+  </ul>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Interesting News
+  </div>
+  <div class="panel-body">
+    <ul class="media-list">
+      <li class="media" ng-repeat="item in vocab.aggregate">
+      <div class="media-body">
+        <h4 class="media-heading">{{item.url}}</h4>
+      </div>
+      </li>
+    </ul>
+  </div>
+</div>
