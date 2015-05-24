@@ -12,7 +12,18 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
-// Uncomment to use Akka
-//libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.11"
+enablePlugins(JavaServerAppPackaging)
+
+maintainer in Docker := "Bryan Tan <techniux@gmail.com>"
+
+dockerBaseImage := "williamyeh/java7:latest"
+
+dockerExposedPorts in Docker := Seq(9000)
+
+scalacOptions in Global ++= Seq(
+  "-target:jvm-1.7"
+)
+
+javacOptions in Global ++= Seq("-source", "1.7", "-target", "1.7")
 
 Revolver.settings
