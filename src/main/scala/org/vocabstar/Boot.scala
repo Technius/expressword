@@ -1,6 +1,6 @@
 package org.vocabstar
 
-import akka.actor.ActorSystem
+import akka.actor.{ ActorSystem, Props }
 import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl.Http
 import com.typesafe.config.ConfigFactory
@@ -14,7 +14,8 @@ object Boot extends App {
   val host = config.getString("host")
   val port = config.getInt("port")
 
-  val routes = new Routes
+  val wordService = system.actorOf(Props[service.InMemoryWordService]())
+  val routes = new Routes(wordService)
 
   val serverFuture = Http().bindAndHandle(routes.default, host, port)
 }

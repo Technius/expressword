@@ -20,11 +20,11 @@ trait Json4sMarshalling {
     Serialization.formats(NoTypeHints) + new EnumNameSerializer(WordCategory)
 
 
-  implicit def unmarshaller(implicit ec: ExecutionContext,
-      mat: FlowMaterializer): FromEntityUnmarshaller[JValue] =
+  implicit def unmarshaller[A <: AnyRef](implicit ec: ExecutionContext,
+      mat: FlowMaterializer, m: Manifest[A]): FromEntityUnmarshaller[A] =
     PredefinedFromEntityUnmarshallers.stringUnmarshaller
       .forContentTypes(MediaTypes.`application/json`)
-      .map(parse(_))
+      .map(parse(_).extract[A])
 
   implicit def marshaller[A <: AnyRef]: ToEntityMarshaller[A] =
     PredefinedToEntityMarshallers
