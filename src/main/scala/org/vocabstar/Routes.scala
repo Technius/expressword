@@ -4,11 +4,9 @@ import akka.actor.{ ActorRef, ActorSystem }
 import akka.pattern.ask
 import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl._
-import akka.http.scaladsl.marshalling.{ PredefinedToEntityMarshallers, ToEntityMarshaller }
 import akka.http.scaladsl.model.MediaTypes
 import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
-import play.twirl.api.Html
 import scala.concurrent.duration._
 import scala.util.Failure
 
@@ -23,11 +21,6 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
   import system.dispatcher
 
   implicit val timeout: Timeout = 5.seconds
-
-  val htmlMarshaller: ToEntityMarshaller[Html] =
-    PredefinedToEntityMarshallers
-      .stringMarshaller(MediaTypes.`text/html`)
-      .compose(_.body)
 
   val default =
     encodeResponse {
@@ -62,19 +55,10 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
         }
       } ~
       get {
-        path("word" / Segment) { word =>
-          complete(s"wip $word")
-        } ~
-        path("about")(displayPage(html.about())) ~
-        pathSingleSlash(displayPage(html.home())) ~
-        path("assets" / Segment) { segment =>
-          getFromResource(s"assets/$segment")
+        pathSingleSlash(getFromResource("assets/template.html")) ~
+        path("assets" / Rest) { path =>
+          getFromResource(s"assets/$path")
         }
       }
-    }
-
-  def displayPage(page: Html) =
-    completeWith(htmlMarshaller) { callback =>
-      callback(page)
     }
 }
