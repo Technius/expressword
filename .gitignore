@@ -6,3 +6,4 @@
 /target/
 *.swp
 **/.DS_STORE
+src/main/resources/private.conf

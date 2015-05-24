@@ -2,6 +2,7 @@ package org.vocabstar.service
 
 import akka.actor._
 import akka.actor.ActorSystem
+import akka.pattern.pipe
 import akka.http.scaladsl.Http
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
@@ -17,6 +18,7 @@ object WordService {
   case class RemoveWord(word: String)
   case class FindWordExact(word: String)
   case class SearchWord(word: String)
+  case class ScrapeData(word: Vocabulary)
 }
 
 class InMemoryWordService extends WordService {

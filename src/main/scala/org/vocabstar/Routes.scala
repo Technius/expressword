@@ -16,7 +16,7 @@ import WordCategory._
 import service._
 import service.WordService._
 
-class Routes(WordService: ActorRef)
+class Routes(WordService: ActorRef, SearchService: SearchService)
             (implicit system: ActorSystem, mat: ActorFlowMaterializer)
     extends util.Json4sMarshalling {
 
@@ -36,7 +36,11 @@ class Routes(WordService: ActorRef)
           complete {
             (WordService ? UpdateWord(vocab)).mapTo[Option[Vocabulary]] map {
               case Some(old) => ApiResponse.success(old)
-              case _ => ApiResponse.success("Word added")
+              case _ =>
+                SearchService.scrapeData(vocab) onSuccess {
+                  case updated => WordService ! UpdateWord(updated)
+                }
+                ApiResponse.success("Word added")
             }
           }
         }

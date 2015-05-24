@@ -1,7 +1,5 @@
 package org.vocabstar
 
-import java.net.URL
-
 object WordCategory extends Enumeration {
   type WordCategory = Value
   val Noun, Pronoun, Verb, Adjective, Adverb, Participle, Article, Preposition =
@@ -19,9 +17,9 @@ case class Vocabulary(
     aggregate: Seq[Item])
 
 sealed trait Item {
-  def url: URL
+  def url: String
 }
 
-case class WebpageItem(url: URL) extends Item
-case class NewsItem(url: URL, summary: String) extends Item
-case class VideoItem(url: URL, description: String) extends Item
+case class WebpageItem(url: String) extends Item
+case class NewsItem(url: String, summary: String) extends Item
+case class VideoItem(url: String, description: String) extends Item
