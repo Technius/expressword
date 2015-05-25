@@ -105,7 +105,9 @@
       $scope.query = $routeParams.query ? $routeParams.query : '';
       document.title = 'ExpressWord - Search: ' + $scope.query;
       $http.get('/api/words?search=' + $scope.query)
-        .success(function(response) { $scope.results = response.message; });
+        .success(function(response) {
+          $scope.results = response.status == 'success' ? response.message : [];
+        });
     }])
     .run(['$rootScope', '$route', function($rootScope, $route) {
       $rootScope.$on('$routeChangeSuccess', function() {

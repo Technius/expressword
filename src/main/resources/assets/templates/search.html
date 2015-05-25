@@ -7,3 +7,11 @@
     <a href="/word/{{::vocab.word}}">{{::vocab.word}} </a>
   </li>
 </ul>
+
+<div class="panel panel-default" ng-show="results.length == 0">
+  <div class="panel-body">
+    <span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
+  </div>
+</div>
+
+<a class="btn btn-default" href="/">Back to Home</a>

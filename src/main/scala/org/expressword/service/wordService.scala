@@ -25,7 +25,7 @@ class InMemoryWordService extends WordService {
 
   import WordService._
 
-  def receive = havingWords(Seq(Vocabulary("test", Seq(), Seq(), Seq())))
+  def receive = havingWords(Seq())
 
   def havingWords(words: Seq[Vocabulary]): Receive = {
     case UpdateWord(vocab) =>
