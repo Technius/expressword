@@ -5,7 +5,7 @@ import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl.Http
 import com.typesafe.config.ConfigFactory
 
-object Boot extends App {
+object ExpressWordServer extends App {
 
   implicit val system = ActorSystem("expressword")
   implicit val materializer = ActorFlowMaterializer()
