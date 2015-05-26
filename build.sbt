@@ -18,7 +18,7 @@ maintainer in Docker := "Bryan Tan <techniux@gmail.com>"
 
 dockerBaseImage := "williamyeh/java7:latest"
 
-dockerExposedPorts in Docker := Seq(9000)
+dockerExposedPorts := Seq(9000)
 
 scalacOptions in Global ++= Seq(
   "-target:jvm-1.7"
