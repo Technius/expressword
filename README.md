@@ -9,12 +9,15 @@ using Akka and Akka HTTP. The client uses Angular.js as a framework.
 First, configure the ExpressWord server by editing `application.conf` and
 `private.conf` located under `src/main/resources`.
 
-To start the ExpressWord server, use `activator reStart` in a terminal. If the
-server was started from an SBT console, the server can be stopped using
-`reStop`.
-
-A `.zip` file can be generated using `activator universal:packageBin` and a
-Docker image can be generated with `activator docker:publishLocal`.
+The following commands can be run in `sbt` or `activator`:
+* `run`: Starts the server. Not good for development as there is currently no
+way of shutting it down without killing SBT.
+* `reStart`: Starts the server as a background process. Use `~reStart` to have
+the server automatically reload on a code change.
+* `reStop`: Stops the server when it is running as a background process.
+* `activator universal:packageBin`: Generates a `.zip` distribution.
+* `activator docker:publishLocal`: Generates and locally publishes a Docker
+image.
 
 # Code Conventions
 
