@@ -21,7 +21,12 @@ dockerBaseImage := "williamyeh/java7:latest"
 dockerExposedPorts := Seq(9000)
 
 scalacOptions in Global ++= Seq(
-  "-target:jvm-1.7"
+  "-target:jvm-1.7",
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-Xfatal-warnings",
+  "-Xlint"
 )
 
 javacOptions in Global ++= Seq("-source", "1.7", "-target", "1.7")
