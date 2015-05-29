@@ -8,6 +8,7 @@ import akka.http.scaladsl._
 import akka.http.scaladsl.model.MediaTypes
 import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
+import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 
@@ -38,21 +39,30 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
           } ~
           (post & entity(as[Vocabulary])) { vocab =>
             complete {
-              (WordService ? UpdateWord(vocab)).mapTo[Option[Vocabulary]] map {
-                case Some(old) => ApiResponse.success(old)
-                case _ =>
-                  logging.debug(s"Scraping word data for '${vocab.word}'")
-                  SearchService.scrapeData(vocab) onComplete {
-                    case Success(updated) =>
+              (WordService ? UpdateWord(vocab))
+                .mapTo[Option[Vocabulary]]
+                .flatMap {
+                  case Some(old) => Future.successful(ApiResponse.success(old))
+                  case _ =>
+                    logging.debug(s"Scraping word data for '${vocab.word}'")
+                    val scrapeFuture = for {
+                      updated <- SearchService.scrapeData(vocab)
+                      _ <- WordService ? UpdateWord(updated)
+                    } yield {
                       logging.debug(
-                        s"Updating information for '${vocab.word}': $updated")
-                      WordService ! UpdateWord(updated)
-                    case Failure(err) =>
+                        s"Updated information for '${vocab.word}': $updated")
+                      ApiResponse.success("Word added")
+                    }
+                    
+                    scrapeFuture onFailure { case _ =>
                       logging.error(
                         s"Failed to retrieve word data for '${vocab.word}'")
-                  }
-                  ApiResponse.success("Word added")
-              }
+                    }
+
+                    scrapeFuture recover { case _ =>
+                      ApiResponse.failure("Failed to retrieve word data")
+                    }
+                }
             }
           }
         } ~

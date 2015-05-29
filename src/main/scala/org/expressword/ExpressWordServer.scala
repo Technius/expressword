@@ -7,11 +7,13 @@ import akka.http.scaladsl.Http
 import com.typesafe.config.ConfigFactory
 import scala.util.Success
 
+import service._
+
 object ExpressWordServer extends App {
 
   implicit val system = ActorSystem("expressword")
   implicit val materializer = ActorFlowMaterializer()
-  implicit val logger = Logging(system, getClass)
+  implicit val logger = Logging(system, "expressword")
 
   val config = ConfigFactory.load()
   val host = config.getString("host")
@@ -19,8 +21,8 @@ object ExpressWordServer extends App {
   val googleApiKey = config.getString("google.apiKey")
   val googleCseId = config.getString("google.searchEngineId")
 
-  val wordService = system.actorOf(Props[service.InMemoryWordService]())
-  val searchService = new service.SearchService(googleApiKey, googleCseId)
+  val wordService = system.actorOf(Props[InMemoryWordService](), name = "word")
+  val searchService = new SearchService(googleApiKey, googleCseId)
   val routes = new Routes(wordService, searchService)
 
   import system.dispatcher

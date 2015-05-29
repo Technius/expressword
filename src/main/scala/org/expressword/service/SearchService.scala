@@ -2,7 +2,7 @@ package org.expressword.service
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpRequest
+import akka.http.scaladsl.model.{ HttpRequest, StatusCodes }
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorFlowMaterializer
 import java.net.URLEncoder
@@ -30,14 +30,16 @@ class SearchService(googleApiKey: String, cseId: String)
     val searchTerm = URLEncoder.encode(vocab.word, "UTF-8")
     val request = HttpRequest(uri =
       searchUrl + s"&q=$searchTerm&exactTerm=$searchTerm")
-    Http().singleRequest(request) flatMap { response =>
-      Unmarshal(response).to[SearchResult] map { results =>
-        val items = results.items.map { item =>
-          val thumbnailOpt = item.pagemap.`cse_thumbnail`.headOption.map(_.src)
-          Item(item.link, item.title, item.snippet, thumbnailOpt)
-        }
-        vocab.copy(aggregate = items)
+    val requestFuture = Http().singleRequest(request)
+    for {
+      response <- requestFuture if response.status == StatusCodes.OK
+      results <- Unmarshal(response).to[SearchResult]
+    } yield {
+      val items = results.items.map { item =>
+        val thumbnailOpt = item.pagemap.`cse_thumbnail`.headOption.map(_.src)
+        Item(item.link, item.title, item.snippet, thumbnailOpt)
       }
+      vocab.copy(aggregate = items)
     }
   }
 }
