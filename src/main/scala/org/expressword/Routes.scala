@@ -5,7 +5,7 @@ import akka.event.LoggingAdapter
 import akka.pattern.ask
 import akka.stream.ActorFlowMaterializer
 import akka.http.scaladsl._
-import akka.http.scaladsl.model.MediaTypes
+import akka.http.scaladsl.model.{ MediaTypes, StatusCodes }
 import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
 import scala.concurrent.Future
@@ -79,6 +79,13 @@ class Routes(WordService: ActorRef, SearchService: SearchService)
               (WordService ? RemoveWord(word)).mapTo[Option[Vocabulary]] map {
                 ApiResponse.fromOpt(_, "Not found")
               }
+            }
+          }
+        } ~
+        path("api" / Rest) { _ =>
+          overrideStatusCode(StatusCodes.NotFound) {
+            complete {
+              ApiResponse.failure("Resource not found")
             }
           }
         } ~
